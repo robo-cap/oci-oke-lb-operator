@@ -77,7 +77,7 @@ It is possible to customize the compartment by setting the container environment
 4. Annotate the new service with `service.beta.kubernetes.io/oci-load-balancer-waf-policy-ocid: "<WAF_POLICY_OCID>"`
 
   **Note**:
-  Service listeners must be of type `HTTP` or `HTTPS` for the WAF to work.
+  Load balancer listeners must be of type `HTTP` or `HTTPS` for the WAF to work.
 
 ## Limitations
 
