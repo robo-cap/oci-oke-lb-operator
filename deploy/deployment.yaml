@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oci-oke-waf-operator
+  namespace: default
+  labels:
+    app: oci-oke-waf-operator
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: oci-oke-waf-operator
+  template:
+    metadata:
+      labels:
+        app: oci-oke-waf-operator
+    spec:
+      serviceAccountName: oci-oke-waf-operator
+      securityContext:
+        runAsUser:
+          1000
+      imagePullSecrets:
+      - name: ocirsecret
+      containers:
+      - env:
+        - name: VERBOSE
+          value: "false"
+        - name: DEBUG
+          value: "false"
+        - name: NAMESPACE
+          value: ALL
+        - name: LIVENESS
+          value: "true"
+        name: kopf-operator
+        image: <region-key>/<tenancy-namespace>/oci-cert-operator:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          failureThreshold: 3
+          periodSeconds: 30
