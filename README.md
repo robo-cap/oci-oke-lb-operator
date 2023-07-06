@@ -41,8 +41,11 @@ Execute below commands to build and push the container image to OCIR:
   `Allow dynamic-group oke-waf-operator to read waf-family in tenancy`
 3. Create operator policy in the OKE cluster compartment
   `Allow dynamic-group oke-waf-operator to read clusters in compartment <compartment_name>`
+
   `Allow dynamic-group oke-waf-operator to read load-balancers in compartment <compartment_name>`
+
   `Allow dynamic-group oke-waf-operator to read waf-policy in compartment <compartment_name>`
+  
   `Allow dynamic-group oke-waf-operator to manage web-app-firewall in compartment <compartment_name>`
 
   
