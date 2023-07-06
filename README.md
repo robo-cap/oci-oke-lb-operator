@@ -38,8 +38,10 @@ Execute below commands to build and push the container image to OCIR:
     `All {instance.compartment.id='<OKE_cluster_compartment_ocid>', tag.<tag_namespace>.<tag_key>.value='<tag_value>'}`
 
 2. Create operator policy in the root compartment (required to identify WAF attached to the load balancer outside of the OKE compartment):
+   
   `Allow dynamic-group oke-waf-operator to read waf-family in tenancy`
-3. Create operator policy in the OKE cluster compartment
+4. Create operator policy in the OKE cluster compartment
+
   `Allow dynamic-group oke-waf-operator to read clusters in compartment <compartment_name>`
 
   `Allow dynamic-group oke-waf-operator to read load-balancers in compartment <compartment_name>`
