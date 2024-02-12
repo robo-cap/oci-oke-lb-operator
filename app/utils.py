@@ -20,7 +20,7 @@ def get_cluster_ocid(logger):
     
         if response.status_code != 200:
             logger.warn(
-                (f"Unexpected response code received when attempting to fetch instance metadata: "
+                (f"Unable to fetch the instance metadata. Only managed nodes are supported."
                 f"{response.status_code}. Response text: {response.text}."))
             return None
     
@@ -259,7 +259,7 @@ def add_waf_to_load_balancer(compartment_id, lb_ocid, waf_policy_ocid, logger):
             wait_for_states=["SUCCEEDED"],
             waiter_kwargs={
                 "max_wait_seconds": 60,
-                "succeed_on_not_found": True})
+                "succeed_on_not_found": False})
             
         
         if create_web_app_firewall_response.status != 200:
@@ -296,7 +296,7 @@ async def align_configuration(compartment_id, desired_configuration, current_con
             signer=signer,
             timeout=5)
         
-        max_attempts = 12
+        max_attempts = 10
         current_attempt = 1
 
         while current_attempt < max_attempts:
@@ -308,7 +308,7 @@ async def align_configuration(compartment_id, desired_configuration, current_con
                 break
             else:
                 logger.info(f"Load Balancer {lb_ocid} is not yet ACTIVE.")
-                await asyncio.sleep(10)
+                await asyncio.sleep(30)
                 current_attempt += 1
                 
         if current_attempt == max_attempts:
@@ -329,7 +329,7 @@ async def align_configuration(compartment_id, desired_configuration, current_con
 
     # WAF policy OCID annotation for the Kubernetes service is present but it is inconsisdent with the current configuration.
     # Need to remove existing WAF and attach the new WAF policy
-    if  desired_configuration.get('waf', {}).get('policy_ocid', '') \
+    if desired_configuration.get('waf', {}).get('policy_ocid', '') \
             and current_configuration.get('waf', {}).get('policy_ocid', '') \
             and current_configuration.get('waf', {}).get('policy_ocid', '') != desired_configuration.get('waf', {}).get('policy_ocid', ''):
 

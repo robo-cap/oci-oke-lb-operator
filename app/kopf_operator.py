@@ -148,6 +148,7 @@ async def on_update(body, namespace, name, uid, logger, **kwargs):
         lb_ocid = get_service_lb_ocid(COMPARTMENT_OCID, namespace, name, uid, logger)
         
         if not lb_ocid:
+            logger.warn(f'Unable to determine associated LoadBalancer for service {namespace}/{name}.')
             return None
         
         if lb_ocid and lb_ocid not in service_locks:

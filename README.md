@@ -1,10 +1,10 @@
 # OKE Operator to attach WAF to OKE Services of type Load Balancer
 
-This Kubernetes operator, built using Kopf, is monitoring the Kubernetes services labeled `use-oci-lb-operator: "yes"`, and is attempting to allign the WAF Policy OCID defined using the service annotation `service.beta.kubernetes.io/oci-load-balancer-waf-policy-ocid` with  the actual Load Balancer configuration.
+This Kubernetes operator, built using Kopf, is monitoring the OKE services labeled `use-oci-lb-operator: "yes"`, and is attempting to attach the WAF Policy OCID defined using the service annotation `service.beta.kubernetes.io/oci-load-balancer-waf-policy-ocid` to the Load Balancer provisioned for the service.
 
 The operator performs the following operations:
 
-1. Each 10 minutes is checking for consistency of the WAF configuration for each labeled service.
+1. Is checking the consistency of the WAF configuration for each labeled service each 10 minutes .
 2. Automatically updates the service configuration when the annotation `service.beta.kubernetes.io/oci-load-balancer-waf-policy-ocid` is changed.
 
 
@@ -19,9 +19,9 @@ The operator performs the following operations:
 
 Execute below commands to build and push the container image to OCIR:
 
-  `$ docker build -t <region-key>.ocir.io/<tenancy-namespace>/oci-oke-waf-operator:latest .`
+  `$ docker build -t <region-key>.ocir.io/<tenancy-namespace>/oci-oke-lb-operator:latest .`
   
-  `$ docker push <region-key>.ocir.io/<tenancy-namespace>/oci-oke-waf-operator:latest`
+  `$ docker push <region-key>.ocir.io/<tenancy-namespace>/oci-oke-lb-operator:latest`
 
 ### Setup OCI Dynamic Group and Policies
 
@@ -86,7 +86,8 @@ It is possible to customize the compartment by setting the container environment
 
 ## Limitations
 
-None known.
+- Virtual nodes are not supported.
+- If deployed to BYON worker nodes, you have to set the `COMPARTMENT_OCID` environment variable.
 
 ## License
 

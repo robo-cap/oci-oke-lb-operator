@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oci-oke-waf-operator
+  name: oci-oke-lb-operator
   namespace: default
   labels:
-    app: oci-oke-waf-operator
+    app: oci-oke-lb-operator
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: oci-oke-waf-operator
+      app: oci-oke-lb-operator
   template:
     metadata:
       labels:
-        app: oci-oke-waf-operator
+        app: oci-oke-lb-operator
     spec:
-      serviceAccountName: oci-oke-waf-operator
+      serviceAccountName: oci-oke-lb-operator
       securityContext:
         runAsUser:
           1000
@@ -35,7 +35,7 @@ spec:
         - name: LIVENESS
           value: "true"
         name: kopf-operator
-        image: <region-key>/<tenancy-namespace>/oci-cert-operator:latest
+        image: <region-key>/<tenancy-namespace>/oci-oke-lb-operator:latest
         imagePullPolicy: Always
         resources:
           requests:

@@ -2,30 +2,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: oci-oke-waf-operator-cluster-role
+  name: oci-oke-lb-operator-cluster-role
 rules:
-  # # Framework: knowing which other operators are running (i.e. peering).
-  # - apiGroups: [kopf.dev]
-  #   resources: [clusterkopfpeerings]
-  #   verbs: [list, watch, patch, get]
-
-  # # Framework: runtime observation of namespaces & CRDs (addition/deletion).
-  # - apiGroups: [apiextensions.k8s.io]
-  #   resources: [customresourcedefinitions]
-  #   verbs: [list, watch]
-  # - apiGroups: [""]
-  #   resources: [namespaces]
-  #   verbs: [list, watch]
-
-  # # Framework: admission webhook configuration management.
-  # - apiGroups: [admissionregistration.k8s.io/v1, admissionregistration.k8s.io/v1beta1]
-  #   resources: [validatingwebhookconfigurations, mutatingwebhookconfigurations]
-  #   verbs: [create, patch]
-
-  # for controlling secrets  
+  # for watching services
   - apiGroups: [""]
     resources: [services]
-    verbs: [list,watch,patch,get]
+    verbs: [get, list, patch, update, watch]
   - apiGroups: [""]
     resources: [events]
     verbs: [create]
@@ -37,18 +19,18 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: oci-oke-waf-operator
+  name: oci-oke-lb-operator
   namespace: default
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: oci-oke-waf-operator-cluster-rolebinding
+  name: oci-oke-lb-operator-cluster-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: oci-oke-waf-operator-cluster-role
+  name: oci-oke-lb-operator-cluster-role
 subjects:
   - kind: ServiceAccount
-    name: oci-oke-waf-operator
+    name: oci-oke-lb-operator
     namespace: default
